@@ -1,0 +1,72 @@
+/* This program uses the right method to get the heat index calculation through the formula that is available on weather.gov. The calculation lets a person pass the base temperature and humidity on a particular day and the program will return a calculated heat index off it. (Used a loop to go through multiple days calculate it for everything. If the heat index is above certain thresholds, this program will warn the user about the heat conditions. If it isn't, it will tell the user that the head conditions are safe and don't require any caution*/
+
+// Let answer = true
+let answer = "YES"
+// Create function to calculate heat index
+function heatIndex(t, h) {
+  let heatIndexNumber = -42.379 + (2.04901523 * t) + (10.14333127 * h) - (0.22475541 * t * h) - (0.00683783 * t * t) - (0.05481717 * h * h) + (0.00122874 * t * t * h) + (0.00085282 * t * h * h) - (0.00000199 * t * t * h * h)
+  return Math.round(heatIndexNumber)
+}
+//Declare constant for errors
+const error = "Error, inadmissible input entered"
+/*Declare constant for user's choice between entering farenheit and celsius*/
+const choice = prompt("Enter choice of F for using farenheit and C for using Celsius");
+/*A while loop to calculate heat index and print errors if application*/
+while (answer == "YES") {
+  for (let i = 1; i <= 100; i += 1) {
+    // Declare variables for temperature, humidity
+    let t = (parseInt(prompt("Enter the temperature")));
+    let h = (parseInt(prompt("Enter the humidity in percentage")));
+    /*Convert celsius to farenheit, if celsius is the chosen unit for temperature. Also check for any errors if an incorrect input is entered*/
+    if (choice == "C") {
+      t = t * 1.8 + 32
+    }
+    /*Check if there has been an error and stop the program if there has.*/
+    else if (!(choice == "C" || choice == "F")) {
+      console.log(error)
+      answer = "NO"
+      break
+    }
+    //Create max heat index render limit
+    if (i == 100) {
+      console.log("Error: too many tries")
+      break
+    }
+    //Count days
+    else {
+      console.log("Day " + i)
+    }
+    //Render heat index
+    let heatIndexNumber = Math.round(heatIndex(t, h))
+    console.log("the heat index = " + (heatIndex(t, h)))
+    /*Inform the user of whether the heat conditions, require any caution*/
+    if (heatIndexNumber <= -4) {
+      console.log("Weather is too cold")
+    }
+    if (heatIndexNumber <= 80) {
+      console.log("Congratulations, the heat and humidity are within safe levels and you do not need to take any caution regarding heat.")
+    }
+    else if (heatIndexNumber >= 80 && heatIndexNumber <= 103) {
+      console.log("Exercise caution because extended exposure to the heat can cause weariness.")
+    }
+    else if (heatIndexNumber >= 103 && heatIndexNumber <= 124) {
+      console.log("Exercise a high degree of caution as heat exhaustion or cramps are likely. In addition, extended heat exposure can cause stroke.")
+    }
+    else if (heatIndexNumber >= 125) {
+      console.log("Heat sicknesses are approaching dangerous levels, try to stay inside if you can, and avoid being outside for extended periods of time.")
+    }
+    else if (heatIndexNumber <= 125) {
+      console.log("Heat sicknesses are at extremely dangerous levels, remain indoors")
+    }
+    else {
+      console.log(error)
+      answer = "NO"
+      break
+    }
+    answer = prompt("Do you want to continue (Enter YES or NO)")
+  }
+
+}
+if (!(answer == "NO" || answer == "YES")) {
+  console.log(error)
+}
